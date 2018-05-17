@@ -11,6 +11,15 @@
 |
 */
 
+/*
 Route::get('/', function () {
     return view('welcome');
 });
+*/
+
+//Route::view('/', 'landing-page');
+Route::get('/', 'LandingPageController@index')->name('landing-page');
+//Route::view('/products', 'products');
+//Route::view('/product', 'product');
+//Route::view('/shop', 'shop');
+Route::get('/shop', 'ShopController@index')->name('shop.index');
