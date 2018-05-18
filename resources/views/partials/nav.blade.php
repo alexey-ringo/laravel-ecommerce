@@ -9,7 +9,9 @@
             <li>
                 <a href="">Cart <span class="cart-count">
                     
-                    <span></span></span>
+                    <span>3</span>
+                    
+                    </span>
                     
                 </a>
             </li>
