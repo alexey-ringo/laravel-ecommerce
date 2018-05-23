@@ -7,11 +7,17 @@
             <li><a href="#">About</a></li>
             <li><a href="#">Blog</a></li>
             <li>
-                <a href="">Cart <span class="cart-count">
+                <a href="{{ route('cart.index') }}">Cart 
+                
+                    @if (Cart::instance('default')->count() > 0)
                     
-                    <span>3</span>
+                    <span class="cart-count">
+                    
+                    <span>{{ Cart::instance('default')->count() }}</span>
                     
                     </span>
+                    
+                    @endif
                     
                 </a>
             </li>

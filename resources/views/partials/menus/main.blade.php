@@ -1,6 +1,6 @@
 <ul>
     <li>
-        <a href="">Shop</a>
+        <a href="{{ route('shop.index') }}">Shop</a>
     </li>
     <li>
         <a href="">About</a>
@@ -9,7 +9,19 @@
         <a href="">Blog</a>
     </li>
     <li>
-        <a href="">Cart</a>
+        <a href="{{ route('cart.index') }}">Cart 
+                
+            @if (Cart::instance('default')->count() > 0)
+                    
+            <span class="cart-count">
+                    
+            <span>{{ Cart::instance('default')->count() }}</span>
+                    
+            </span>
+                    
+            @endif
+                    
+        </a>
     </li>
     
 </ul>
