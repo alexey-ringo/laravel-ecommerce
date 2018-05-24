@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Category;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -14,8 +15,35 @@ class ShopController extends Controller
      */
     public function index()
     {
+        //если пришел get-запрос ?category=....
+        if(request()->category) {
+            //то вкл фильтр
+            $products = Product::with('categories')->whereHas('categories', function ($query) {
+                //сматчивание пришедшего get-дозапроса со slug категории
+                $query->where('slug', request()->category);
+            })->get();
+            
+            $categories = Category::all();
+            
+            $categoryName = $categories->where('slug', request()->category)->first()->name;
+            
+        }
+        
+        else {
+            
         $products = Product::inRandomOrder()->take(7)->get();
-        return view('shop')->with('products', $products);
+        
+        $categories = Category::all();
+        
+        $categoryName = 'Featured';
+        
+        }
+        
+        return view('shop')->with([
+            'products'=> $products,
+            'categories' => $categories,
+            'categoryName' => $categoryName,
+            ]);
     }
 
     /**
@@ -48,6 +76,7 @@ class ShopController extends Controller
     public function show($slug)
     {
         $product = Product::where('slug', $slug)->firstOrFail();
+        
         $mightAlsoLike = Product::where('slug', '!=', $slug)->mightAlsoLike()->get();
         
         return view('product')->with([
