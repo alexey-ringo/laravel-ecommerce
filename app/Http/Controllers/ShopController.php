@@ -17,26 +17,27 @@ class ShopController extends Controller
     {
         //если пришел get-запрос ?category=....
         if(request()->category) {
-            //то вкл фильтр
+            //то вкл фильтр, выводящий все продукты, принадлежащие переданной категории
             $products = Product::with('categories')->whereHas('categories', function ($query) {
                 //сматчивание пришедшего get-дозапроса со slug категории
                 $query->where('slug', request()->category);
             })->get();
             
             $categories = Category::all();
-            
             $categoryName = $categories->where('slug', request()->category)->first()->name;
             
         }
         
         else {
-            
         $products = Product::inRandomOrder()->take(7)->get();
-        
         $categories = Category::all();
-        
         $categoryName = 'Featured';
+        }
         
+        if (request()->sort == 'low_high') {
+            $products = $products->sortBy('price');
+        } elseif (request()->sort == 'high_low') {
+            $products = $products->sortByDesc('price');
         }
         
         return view('shop')->with([
@@ -46,27 +47,7 @@ class ShopController extends Controller
             ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
+    
     /**
      * Display the specified resource.
      *
@@ -85,37 +66,5 @@ class ShopController extends Controller
             ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }
