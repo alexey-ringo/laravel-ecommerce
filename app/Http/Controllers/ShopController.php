@@ -15,29 +15,36 @@ class ShopController extends Controller
      */
     public function index()
     {
+        $pagination = 9;
+        $categories = Category::all();
+        
         //если пришел get-запрос ?category=....
         if(request()->category) {
             //то вкл фильтр, выводящий все продукты, принадлежащие переданной категории
             $products = Product::with('categories')->whereHas('categories', function ($query) {
                 //сматчивание пришедшего get-дозапроса со slug категории
                 $query->where('slug', request()->category);
-            })->get();
+            })/*->get()*/;
             
-            $categories = Category::all();
+            /* Защитим от возможной передави в запросе несуществующей категории
             $categoryName = $categories->where('slug', request()->category)->first()->name;
-            
+            */
+            $categoryName = optional($categories->where('slug', request()->category)->first())->name;
         }
-        
         else {
-        $products = Product::inRandomOrder()->take(7)->get();
-        $categories = Category::all();
+        //$products = Product::take(12);
+        //Добавили в табл products поле featured для выделения особых товаров
+        $products = Product::where('featured', true);
         $categoryName = 'Featured';
         }
         
         if (request()->sort == 'low_high') {
-            $products = $products->sortBy('price');
+            $products = $products->orderBy('price')->paginate($pagination);
         } elseif (request()->sort == 'high_low') {
-            $products = $products->sortByDesc('price');
+            $products = $products->orderBy('price', 'desc')->paginate($pagination);
+        }
+        else {
+            $products = $products->paginate($pagination);
         }
         
         return view('shop')->with([
