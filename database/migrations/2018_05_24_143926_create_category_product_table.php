@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateCategoryProductTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migratio
      *
      * @return void
      */
@@ -21,7 +21,7 @@ class CreateCategoryProductTable extends Migration
                   ->on('products')->onDelete('cascade');
             $table->integer('category_id')->unsigned()->nullable();
             $table->foreign('category_id')->references('id')
-                  ->on('categories')->onDelete('cascade');
+                  ->on('category')->onDelete('cascade');
             
             $table->timestamps();
         });
