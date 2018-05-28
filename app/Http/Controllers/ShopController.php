@@ -24,15 +24,11 @@ class ShopController extends Controller
             $products = Product::with('categories')->whereHas('categories', function ($query) {
                 //сматчивание пришедшего get-дозапроса со slug категории
                 $query->where('slug', request()->category);
-            })/*->get()*/;
+            });
             
-            /* Защитим от возможной передави в запросе несуществующей категории
-            $categoryName = $categories->where('slug', request()->category)->first()->name;
-            */
             $categoryName = optional($categories->where('slug', request()->category)->first())->name;
         }
         else {
-        //$products = Product::take(12);
         //Добавили в табл products поле featured для выделения особых товаров
         $products = Product::where('featured', true);
         $categoryName = 'Featured';

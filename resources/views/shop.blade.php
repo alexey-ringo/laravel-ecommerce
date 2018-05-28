@@ -55,8 +55,7 @@
 
             <div class="spacer"></div>
             
-            {{-- {{ $products->links() }} --}}
-            {{ $products->appends(request()->input())->links() }}
+           {{ $products->appends(request()->input())->links() }}
             
         </div>
     </div>
