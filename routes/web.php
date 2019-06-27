@@ -43,3 +43,5 @@ Route::post('/saveForLater/switchToCart/{product}', 'SaveForLaterController@swit
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+
+Route::get('/search', 'ShopController@search')->name('search');
